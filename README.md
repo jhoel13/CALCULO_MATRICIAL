@@ -5,6 +5,10 @@ Aplicación web independiente para el análisis real de armaduras y pórticos pl
 Autor del proyecto: **Jhoel Tocas Cercado**  
 Universidad Nacional de Cajamarca · Ingeniería Hidráulica
 
+## Aplicación publicada
+
+[**Abrir Laboratorio Matricial UNC**](https://laboratorio-matricial-unc.jtocasc24-1.chatgpt.site)
+
 ## Alcance
 
 - Motor de armaduras 2D: 2 GDL por nodo, matrices elementales 4×4, deformación, esfuerzo y fuerza axial.
