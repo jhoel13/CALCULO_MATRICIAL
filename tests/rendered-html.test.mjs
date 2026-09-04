@@ -18,6 +18,15 @@ test("the production bundle contains the independent Laboratorio Matricial UNC a
   assert.match(app, /II-1-Metodo-Matricial-de-Regidez\(3\)\.pdf/i);
   assert.match(app, /Apoyos, fuerzas, ejes locales y deformada/i);
   assert.match(app, /Cuatro figuras, un solo modelo/i);
+  assert.match(app, /Del diseño del concreto a la matriz de rigidez/i);
+  assert.match(app, /26 hojas Mathcad clasificadas y descargables/i);
   assert.match(clientManifest, /lab-app/i);
   assert.doesNotMatch(`${worker}\n${app}`, /codex-preview/i);
+});
+
+test("the 26 Mathcad resources are included in the public library", async () => {
+  const resources = await readdir(new URL("../public/recursos/mathcad/", import.meta.url));
+  assert.equal(resources.filter((name) => name.endsWith(".mcdx")).length, 26);
+  assert.ok(resources.includes("Diagramas de Vigas (DFC-DMF).mcdx"));
+  assert.ok(resources.includes("Diseño de Zapata Combinada (NTP. E.060).mcdx"));
 });

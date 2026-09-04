@@ -9,6 +9,17 @@ Universidad Nacional de Cajamarca · Ingeniería Hidráulica
 
 [**Abrir Laboratorio Matricial UNC**](https://laboratorio-matricial-unc.jtocasc24-1.chatgpt.site)
 
+## Ampliación: concreto + matrices
+
+La aplicación incorpora una sección adicional que conserva el laboratorio original y conecta sus resultados con 26 hojas Mathcad de vigas, columnas, losas, escaleras, nudos y cimentaciones.
+
+- Calculadora interactiva de `f'c → Ec → EI → k' → K`.
+- Matriz local 6×6 regenerada con la sección y longitud ingresadas.
+- Envío directo de `Ec` al catálogo de materiales del estudio matricial.
+- Biblioteca filtrable con clasificación **Matricial**, **Ambos** y **Concreto**.
+- Descarga individual de las hojas `.mcdx` originales.
+- Acceso permanente a la versión original desde la ampliación.
+
 ## Alcance
 
 - Motor de armaduras 2D: 2 GDL por nodo, matrices elementales 4×4, deformación, esfuerzo y fuerza axial.

@@ -10,6 +10,7 @@ import {
   pdfMemberLoadsExample,
 } from "../src/lib/examples";
 import { convertProjectUnits } from "../src/lib/units";
+import { concreteFrameProperties } from "../src/lib/concrete";
 
 const close = (actual: number, expected: number, relative = 1e-6) => {
   const scale = Math.max(1, Math.abs(actual), Math.abs(expected));
@@ -105,5 +106,14 @@ describe("motor matricial", () => {
       close(element.c ** 2 + element.s ** 2, 1, 1e-12);
       expect(element.symmetryError).toBeLessThan(1e-10);
     }
+  });
+
+  it("vincula f'c con Ec, EI y una matriz local 6×6 simétrica", () => {
+    const result = concreteFrameProperties({ fcKgfCm2: 210, widthCm: 30, depthCm: 50, lengthM: 4.5, uniformLoadKgfM: 800 });
+    close(result.ecKgfCm2, 15000 * Math.sqrt(210), 1e-12);
+    expect(result.localStiffness).toHaveLength(6);
+    expect(result.localStiffness.every((row) => row.length === 6)).toBe(true);
+    result.localStiffness.forEach((row, i) => row.forEach((value, j) => close(value, result.localStiffness[j][i], 1e-12)));
+    expect(result.simpleBeamDeflectionCm).toBeGreaterThan(0);
   });
 });

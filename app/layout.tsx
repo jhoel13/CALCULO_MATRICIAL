@@ -3,12 +3,12 @@ import "katex/dist/katex.min.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Laboratorio Matricial UNC",
-  description: "Cuaderno interactivo para el análisis real de armaduras y pórticos 2D mediante el método matricial de rigidez.",
+  title: "Laboratorio Matricial UNC · Concreto",
+  description: "Análisis de armaduras y pórticos 2D por rigidez, conectado con aplicaciones de concreto armado y hojas Mathcad.",
   authors: [{ name: "Jhoel Tocas Cercado" }],
   openGraph: {
-    title: "Laboratorio Matricial UNC",
-    description: "Modela, ensambla, resuelve y audita estructuras 2D paso a paso.",
+    title: "Laboratorio Matricial UNC · Concreto",
+    description: "Modela, ensambla y vincula el cálculo matricial con aplicaciones de concreto estructural.",
     type: "website",
   },
   icons: {
