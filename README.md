@@ -1,6 +1,6 @@
 # Laboratorio Matricial UNC
 
-Aplicación web independiente para el análisis real de armaduras y pórticos planos mediante el método matricial de rigidez. Fue construida para calculo matricial.
+Aplicación web independiente para el análisis real de armaduras y pórticos planos mediante el método matricial de rigidez. Fue construida para calculo matricial con fines académicos.
 
 Autor del proyecto: **Jhoel Tocas Cercado**  
 Universidad Nacional de Cajamarca · Ingeniería Hidráulica
