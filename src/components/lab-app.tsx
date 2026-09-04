@@ -46,6 +46,7 @@ import MatrixTable, { formatNumber, VectorTable } from "./matrix-table";
 import GraphicsGallery from "./graphics-gallery";
 import StructureCanvas from "./structure-canvas";
 import ConcreteMatrixBridge from "./concrete-matrix-bridge";
+import PalettePicker from "./palette-picker";
 
 type View = "studio" | "applications" | "notebook" | "matrices" | "results" | "graphics" | "theory" | "projects";
 type EditorTab = "project" | "nodes" | "elements" | "loads" | "materials";
@@ -364,7 +365,7 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
       <div className="lab-brand"><div className="brand-seal"><span>L</span><span>M</span></div><div><strong>LABORATORIO MATRICIAL</strong><small>Universidad Nacional de Cajamarca · Ingeniería Hidráulica</small></div></div>
       <button className="mobile-menu-button" onClick={() => setMobileMenu(!mobileMenu)}><Menu size={20} /></button>
       <nav className={mobileMenu ? "open" : ""}>{nav.map((item) => { const Icon = item.icon; return <button key={item.id} className={view === item.id ? "active" : ""} onClick={() => { setView(item.id); setMobileMenu(false); if (item.id === "projects" && user) window.setTimeout(() => void refreshCloud(), 0); }}><Icon size={16} />{item.label}</button>; })}</nav>
-      <div className="header-actions"><span className="save-indicator"><Cloud size={13} />{saveState}</span><button className="icon-button" title="Cambiar tema" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? <Moon size={17} /> : <Sun size={17} />}</button>{user ? <a className="account-button" href={signOutPath}><CircleUserRound size={16} /><span>{user.displayName.split(" ")[0]}</span></a> : <a className="account-button" href={signInPath}><LogIn size={16} /><span>Ingresar / registrarse</span></a>}</div>
+      <div className="header-actions"><span className="save-indicator"><Cloud size={13} />{saveState}</span><PalettePicker /><button className="icon-button" title="Cambiar tema" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? <Moon size={17} /> : <Sun size={17} />}</button>{user ? <a className="account-button" href={signOutPath}><CircleUserRound size={16} /><span>{user.displayName.split(" ")[0]}</span></a> : <a className="account-button" href={signInPath}><LogIn size={16} /><span>Ingresar / registrarse</span></a>}</div>
     </header>
 
     <main>

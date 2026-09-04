@@ -20,6 +20,11 @@ test("the production bundle contains the independent Laboratorio Matricial UNC a
   assert.match(app, /Cuatro figuras, un solo modelo/i);
   assert.match(app, /Del diseño del concreto a la matriz de rigidez/i);
   assert.match(app, /26 hojas Mathcad clasificadas y descargables/i);
+  assert.match(app, /DISEÑO DE MEZCLAS COMPLETO/i);
+  assert.match(app, /Comparar métodos/i);
+  assert.match(app, /Usar f′c=/i);
+  assert.match(app, /Biblioteca Mathcad/i);
+  assert.match(app, /Cambiar colores de la aplicación/i);
   assert.match(clientManifest, /lab-app/i);
   assert.doesNotMatch(`${worker}\n${app}`, /codex-preview/i);
 });

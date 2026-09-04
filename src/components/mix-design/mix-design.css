@@ -1,0 +1,78 @@
+@import "./mix-design-source.css";
+
+.mix-design-suite {
+  --mix-accent: var(--blue);
+  --paper: #f3f6fb;
+  --sheet: #fff;
+  --surface: #fff;
+  --ink: #14243a;
+  --ink-2: color-mix(in srgb, #14243a 82%, var(--mix-accent));
+  --muted: #65717e;
+  --line: #d8d9d6;
+  --line-soft: #e6e7e4;
+  --blue-soft: color-mix(in srgb, var(--mix-accent) 13%, #fff);
+  --orange: var(--mix-accent);
+  --sky: color-mix(in srgb, var(--mix-accent) 72%, #34c9df);
+  --sand: #e2b456;
+  --green: #1b9270;
+  --violet: color-mix(in srgb, var(--blue) 48%, #9a54dc);
+  --sidebar: color-mix(in srgb, var(--ink) 92%, #07111b);
+  --orange-dark: color-mix(in srgb, var(--orange) 78%, #7b210d);
+  --accent-soft: color-mix(in srgb, var(--blue) 13%, transparent);
+  --accent-shadow: color-mix(in srgb, var(--blue) 24%, transparent);
+  margin: 22px 0 44px;
+  overflow: clip;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--sheet-2) 86%, var(--blue-soft));
+  box-shadow: var(--shadow);
+}
+
+.mix-suite-toolbar {
+  min-height: 82px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--sheet);
+}
+
+.mix-suite-toolbar > div:first-child { min-width: 230px; display: grid; gap: 7px; }
+.mix-suite-toolbar > div:first-child > span { color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .13em; }
+.mix-suite-toolbar input { width: min(410px, 100%); padding: 5px 0; border: 0; border-bottom: 1px solid transparent; outline: 0; background: transparent; color: var(--ink); font-family: Georgia, serif; font-size: 22px; }
+.mix-suite-toolbar input:focus { border-bottom-color: var(--blue); }
+.mix-suite-actions { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+.mix-suite-actions button { min-height: 40px; }
+
+.mix-suite-nav {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(105px, 1fr));
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: var(--sheet);
+}
+
+.mix-suite-nav button { min-height: 68px; padding: 9px 8px; flex-direction: column; gap: 5px; border: 0; border-right: 1px solid var(--line-soft); border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.mix-suite-nav button:last-child { border-right: 0; }
+.mix-suite-nav button:hover { color: var(--blue); background: var(--blue-soft); }
+.mix-suite-nav button.active { color: var(--blue); border-bottom-color: var(--blue); background: color-mix(in srgb, var(--blue-soft) 68%, var(--sheet)); }
+.mix-suite-nav button.active svg { transform: scale(1.1); }
+
+.mix-design-suite .studio-content { padding: 28px 22px 42px; }
+.mix-design-suite .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 42px; padding: 0 16px; border: 1px solid transparent; font-size: 12px; font-weight: 800; cursor: pointer; }
+.mix-design-suite .button-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 20px var(--accent-shadow); }
+.mix-design-suite .button-primary:hover { background: color-mix(in srgb, var(--blue) 82%, #000); }
+.mix-design-suite .full-button { width: 100%; }
+
+@media (max-width: 920px) {
+  .mix-suite-toolbar { align-items: stretch; flex-direction: column; }
+  .mix-suite-actions { justify-content: flex-start; }
+}
+
+@media (max-width: 560px) {
+  .mix-design-suite { margin-inline: -18px; border-inline: 0; }
+  .mix-suite-toolbar { padding: 14px; }
+  .mix-suite-actions button { flex: 1 1 145px; }
+  .mix-design-suite .studio-content { padding: 22px 13px 32px; }
+}
