@@ -7,7 +7,9 @@ Universidad Nacional de Cajamarca · Ingeniería Hidráulica
 
 ## Aplicación publicada
 
-[**Abrir Laboratorio Matricial UNC**](https://laboratorio-matricial-unc.jtocasc24-1.chatgpt.site)
+[**Abrir la versión actual: Laboratorio Matricial + Concreto UNC**](https://laboratorio-matricial-concreto-unc.jhoel-tocas.chatgpt.site)
+
+Esta es la versión vigente, con la suite de diseño de mezclas y la corrección de las tablas que aparecían sin datos.
 
 ## Ampliación: concreto + matrices
 
