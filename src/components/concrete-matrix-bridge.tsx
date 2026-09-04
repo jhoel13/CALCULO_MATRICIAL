@@ -14,6 +14,7 @@ import {
 import { useMemo, useState } from "react";
 import { concreteFrameProperties } from "../lib/concrete";
 import MatrixTable, { formatNumber } from "./matrix-table";
+import MixDesignSuite from "./mix-design/mix-design-suite";
 
 type Track = "Matricial" | "Ambos" | "Concreto";
 
@@ -59,6 +60,7 @@ const resources: Resource[] = [
 const filters = ["Todos", "Matricial", "Ambos", "Concreto"] as const;
 
 export default function ConcreteMatrixBridge({ onOpenLab, onApplyConcrete }: { onOpenLab: () => void; onApplyConcrete: (ePa: number) => void }) {
+  const [workspace, setWorkspace] = useState<"matrix" | "mix" | "library">("mix");
   const [fc, setFc] = useState(210);
   const [b, setB] = useState(30);
   const [h, setH] = useState(50);
@@ -94,6 +96,13 @@ export default function ConcreteMatrixBridge({ onOpenLab, onApplyConcrete }: { o
       </div>
     </div>
 
+    <nav className="concrete-section-tabs" aria-label="Áreas de concreto y matrices">
+      <button className={workspace === "mix" ? "active" : ""} onClick={() => setWorkspace("mix")}><span>01</span><strong>Diseño de mezclas</strong><small>ACI, Walker, Bolomey y laboratorio</small></button>
+      <button className={workspace === "matrix" ? "active" : ""} onClick={() => setWorkspace("matrix")}><span>02</span><strong>Conexión matricial</strong><small>f′c → Ec → EI → k′</small></button>
+      <button className={workspace === "library" ? "active" : ""} onClick={() => setWorkspace("library")}><span>03</span><strong>Biblioteca Mathcad</strong><small>26 memorias clasificadas</small></button>
+    </nav>
+
+    {workspace === "matrix" && <>
     <div className="bridge-workbench">
       <article className="bridge-inputs">
         <div className="bridge-title"><span><Calculator size={17} /></span><div><small>PASO 01</small><h2>Propiedades del elemento</h2></div></div>
@@ -121,7 +130,15 @@ export default function ConcreteMatrixBridge({ onOpenLab, onApplyConcrete }: { o
         <div className="matrix-caption"><code>k′(Ec, A, I, L)</code><span>6 × 6 · valores en sistema kgf–cm</span></div>
       </article>
     </div>
+    </>}
 
+    {workspace === "mix" && <MixDesignSuite onUseInMatrix={(strength) => {
+      setFc(strength);
+      setWorkspace("matrix");
+      window.setTimeout(() => document.querySelector(".bridge-workbench")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+    }} />}
+
+    {workspace === "library" && <>
     <div className="resource-heading">
       <div><span className="eyebrow">BIBLIOTECA TÉCNICA INTEGRADA</span><h2>26 hojas Mathcad clasificadas y descargables</h2><p>“Ambos” identifica los documentos que conectan directamente resultados matriciales con verificaciones de concreto armado.</p></div>
       <div className="resource-stats"><span><strong>{resources.filter((item) => item.track === "Matricial").length}</strong>matricial</span><span><strong>{resources.filter((item) => item.track === "Ambos").length}</strong>ambos</span><span><strong>{resources.filter((item) => item.track === "Concreto").length}</strong>concreto</span></div>
@@ -141,5 +158,6 @@ export default function ConcreteMatrixBridge({ onOpenLab, onApplyConcrete }: { o
     </div>
     {!visible.length && <div className="resource-empty">No hay archivos que coincidan con la búsqueda.</div>}
     <div className="academic-warning"><BookOpenCheck size={22} /><div><strong>Uso académico y trazable</strong><p>El laboratorio ejecuta el análisis matricial. Las hojas Mathcad complementan el diseño y deben revisarse antes de emplearse en un proyecto real.</p></div></div>
+    </>}
   </section>;
 }

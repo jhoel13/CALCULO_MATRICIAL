@@ -13,12 +13,16 @@ Universidad Nacional de Cajamarca · Ingeniería Hidráulica
 
 La aplicación incorpora una sección adicional que conserva el laboratorio original y conecta sus resultados con 26 hojas Mathcad de vigas, columnas, losas, escaleras, nudos y cimentaciones.
 
+- Suite completa integrada desde [`jhoel13/Dise-o-De-Mezclas`](https://github.com/jhoel13/Dise-o-De-Mezclas): resumen, ACI 211.1, comparación ACI/Walker/Bolomey, Fuller, ajuste de prueba, dosificaciones, agregados, probetas, informes y teoría.
+- Guardado local automático e importación/exportación JSON, PDF, fichas técnicas y Excel.
 - Calculadora interactiva de `f'c → Ec → EI → k' → K`.
 - Matriz local 6×6 regenerada con la sección y longitud ingresadas.
+- Transferencia directa de `f'c` desde el diseño de mezcla hacia el cálculo matricial.
 - Envío directo de `Ec` al catálogo de materiales del estudio matricial.
 - Biblioteca filtrable con clasificación **Matricial**, **Ambos** y **Concreto**.
 - Descarga individual de las hojas `.mcdx` originales.
 - Acceso permanente a la versión original desde la ampliación.
+- Selector persistente con seis paletas de color, compatible con los modos claro y oscuro.
 
 ## Alcance
 
