@@ -64,7 +64,7 @@ export default function AggregatesSection({
                 <tbody>
                   {current.analysis.map((row, index) => (
                     <tr key={row.sieve}>
-                      <th>{row.sieve}</th>
+                      <th scope="row">{row.sieve}</th>
                       <td>{row.openingMm == null ? "—" : `${format(row.openingMm, 3)} mm`}</td>
                       <td><input aria-label={`Retenido ${row.sieve}`} type="number" step="0.01" value={row.retainedG} onChange={(event) => updateSieve(index, Number(event.target.value))} /></td>
                       <td>{format(row.retainedPercent)}</td>
@@ -119,7 +119,7 @@ export default function AggregatesSection({
                 <tbody>
                   {project.aggregateLab.finesSamples.map((sample, index) => (
                     <tr key={index}>
-                      <th>M-{index + 1}</th>
+                      <th scope="row">M-{index + 1}</th>
                       <td><input type="number" aria-label={`Masa inicial ${index + 1}`} value={sample.initialDry} onChange={(event) => updateLab("finesSamples", project.aggregateLab.finesSamples.map((item, itemIndex) => itemIndex === index ? { ...item, initialDry: Number(event.target.value) } : item))} /></td>
                       <td><input type="number" aria-label={`Masa lavada ${index + 1}`} value={sample.washedDry} onChange={(event) => updateLab("finesSamples", project.aggregateLab.finesSamples.map((item, itemIndex) => itemIndex === index ? { ...item, washedDry: Number(event.target.value) } : item))} /></td>
                       <td><strong>{format(finesPercent(sample))}%</strong></td>
@@ -184,7 +184,7 @@ function MoistureTable({
           <thead><tr><th>M</th><th>Húm. + rec.</th><th>Seca + rec.</th><th>Rec.</th><th>Humedad</th></tr></thead>
           <tbody>{rows.map((sample, index) => (
             <tr key={index}>
-              <th>{index + 1}</th>
+              <th scope="row">M-{index + 1}</th>
               {(["wetWithContainer", "dryWithContainer", "container"] as const).map((key) => (
                 <td key={key}><input type="number" step="0.001" aria-label={`${title} ${key} ${index + 1}`} value={sample[key]} onChange={(event) => onChange(rows.map((item, itemIndex) => itemIndex === index ? { ...item, [key]: Number(event.target.value) } : item))} /></td>
               ))}

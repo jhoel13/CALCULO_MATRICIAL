@@ -180,7 +180,7 @@ export default function MethodsSection({
                 <tbody>
                   {comparison.methods.map((method) => (
                     <tr key={method.id}>
-                      <th><span className="method-dot" style={{ background: methodColors[method.id] }} />{method.shortName}</th>
+                      <th scope="row"><span className="method-dot" style={{ background: methodColors[method.id] }} />{method.shortName}</th>
                       <td>{format(method.water)} kg</td>
                       <td>{format(method.wcMethod, 3)}</td>
                       <td><strong>{format(method.wc, 3)}</strong></td>
@@ -290,7 +290,7 @@ export default function MethodsSection({
                 <thead><tr><th>Malla</th><th>Abertura</th><th>Pasante A.F.</th><th>Pasante A.G.</th><th>Fuller objetivo</th><th>Combinado</th><th>Desviación</th></tr></thead>
                 <tbody>{comparison.fuller.points.map((point) => (
                   <tr key={point.openingMm}>
-                    <th>{point.sieve}</th><td>{format(point.openingMm, 3)} mm</td>
+                    <th scope="row">{point.sieve}</th><td>{format(point.openingMm, 3)} mm</td>
                     <td>{format(point.finePassing)}%</td><td>{format(point.coarsePassing)}%</td>
                     <td>{format(point.targetPassing)}%</td><td><strong>{format(point.combinedPassing)}%</strong></td>
                     <td className={Math.abs(point.deviation) <= 5 ? "within" : "outside"}>{point.deviation >= 0 ? "+" : ""}{format(point.deviation)} pp</td>
@@ -357,8 +357,8 @@ function MethodTables({
         <section className="module-panel">
           <div className="module-heading"><span><TableProperties size={18} /></span><div><h2>Relación a/c del documento</h2><p>Interpolación lineal usando f&apos;cr común = {format(project.mix.fc + project.mix.strengthMargin, 0)} kgf/cm².</p></div></div>
           <div className="data-table-wrap"><table className="data-table compact-method-table"><thead><tr><th>Método</th><th>Puntos de tabla</th><th>a/c interpolada</th></tr></thead><tbody>
-            <tr><th>Walker</th><td>200→0,65 · 250→0,58 · 300→0,52 · 350→0,47 · 400→0,42 · 450→0,38</td><td><strong>{format(walker.wcMethod, 3)}</strong></td></tr>
-            <tr><th>Bolomey</th><td>175→0,625 · 210→0,575 · 250→0,525 · 300→0,475 · 350→0,425</td><td><strong>{format(bolomey.wcMethod, 3)}</strong></td></tr>
+            <tr><th scope="row">Walker</th><td>200→0,65 · 250→0,58 · 300→0,52 · 350→0,47 · 400→0,42 · 450→0,38</td><td><strong>{format(walker.wcMethod, 3)}</strong></td></tr>
+            <tr><th scope="row">Bolomey</th><td>175→0,625 · 210→0,575 · 250→0,525 · 300→0,475 · 350→0,425</td><td><strong>{format(bolomey.wcMethod, 3)}</strong></td></tr>
           </tbody></table></div>
           <p className="module-note">Para Bolomey se usa el punto medio de cada intervalo del PDF. La ecuación impresa en ese documento no es dimensionalmente clara; por eso la app no la presenta como ley calibrada.</p>
         </section>
@@ -373,7 +373,7 @@ function MethodTables({
       <section className="module-panel">
         <div className="module-heading"><span><TableProperties size={18} /></span><div><h2>Walker · volumen compactado de A.G.</h2><p>Filas por TMN y columnas por módulo de finura del agregado fino.</p></div></div>
         <div className="data-table-wrap"><table className="data-table walker-matrix"><thead><tr><th>TMN / MF</th>{methodTables.walkerFinenessModuli.map((mf) => <th key={mf}>{format(mf, 1)}</th>)}</tr></thead><tbody>
-          {methodTables.nominalSizes.map((size, rowIndex) => <tr key={size}><th>{sizeLabel(size)} · {format(size, 2)} mm</th>{methodTables.walkerCoarseVolume[rowIndex].map((value, colIndex) => <td className={Math.abs(size - project.methods.nominalMaximumMm) < 0.01 && Math.abs(methodTables.walkerFinenessModuli[colIndex] - comparison.finenessModulus) <= 0.11 ? "current-cell" : ""} key={`${size}-${colIndex}`}>{format(value, 2)}</td>)}</tr>)}
+          {methodTables.nominalSizes.map((size, rowIndex) => <tr key={size}><th scope="row">{sizeLabel(size)} · {format(size, 2)} mm</th>{methodTables.walkerCoarseVolume[rowIndex].map((value, colIndex) => <td className={Math.abs(size - project.methods.nominalMaximumMm) < 0.01 && Math.abs(methodTables.walkerFinenessModuli[colIndex] - comparison.finenessModulus) <= 0.11 ? "current-cell" : ""} key={`${size}-${colIndex}`}>{format(value, 2)}</td>)}</tr>)}
         </tbody></table></div>
         <div className="formula-callout"><span>Interpolación aplicada con MF = {format(comparison.finenessModulus, 2)} y TMN = {format(project.methods.nominalMaximumMm, 2)} mm</span><strong>V A.G. = {format(walker.coarseBulkVolume ?? 0, 3)} m³/m³</strong></div>
       </section>

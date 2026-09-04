@@ -35,3 +35,16 @@ test("the 26 Mathcad resources are included in the public library", async () => 
   assert.ok(resources.includes("Diagramas de Vigas (DFC-DMF).mcdx"));
   assert.ok(resources.includes("Diseño de Zapata Combinada (NTP. E.060).mcdx"));
 });
+
+test("mix-design row labels stay visible and carry their corresponding data", async () => {
+  const css = await readFile(new URL("../src/components/mix-design/mix-design-source.css", import.meta.url), "utf8");
+  const methods = await readFile(new URL("../src/components/mix-design/sections/methods-section.tsx", import.meta.url), "utf8");
+  const aggregates = await readFile(new URL("../src/components/mix-design/sections/aggregates-section.tsx", import.meta.url), "utf8");
+
+  assert.match(css, /\.data-table tbody th \{[^}]*background: var\(--sheet\);[^}]*color: var\(--ink\)/);
+  assert.match(methods, /scope="row">Walker/);
+  assert.match(methods, /scope="row">Bolomey/);
+  assert.match(methods, /scope="row">\{sizeLabel\(size\)\}/);
+  assert.match(aggregates, /scope="row">\{row\.sieve\}/);
+  assert.match(aggregates, /scope="row">M-\{index \+ 1\}/);
+});
