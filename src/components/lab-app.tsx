@@ -34,6 +34,7 @@ import {
   Table2,
   Trash2,
   Upload,
+  Waves,
   X,
 } from "lucide-react";
 import katex from "katex";
@@ -48,8 +49,9 @@ import StructureCanvas from "./structure-canvas";
 import ConcreteMatrixBridge from "./concrete-matrix-bridge";
 import PalettePicker from "./palette-picker";
 import SoilLabTab from "./soil-lab-tab";
+import HydroCalcTab from "./hydrocalc-tab";
 
-type View = "studio" | "applications" | "soils" | "notebook" | "matrices" | "results" | "graphics" | "theory" | "projects";
+type View = "studio" | "applications" | "soils" | "hydrocalc" | "notebook" | "matrices" | "results" | "graphics" | "theory" | "projects";
 type EditorTab = "project" | "nodes" | "elements" | "loads" | "materials";
 type User = { displayName: string; email: string } | null;
 type CloudProject = { id: string; name: string; structureType: string; versionNumber: number; updatedAt: string; model: StructuralProject };
@@ -59,6 +61,7 @@ const nav: Array<{ id: View; label: string; icon: typeof Calculator }> = [
   { id: "studio", label: "Estudio", icon: FlaskConical },
   { id: "applications", label: "Concreto + matrices", icon: Building2 },
   { id: "soils", label: "Mecánica de suelos", icon: Layers3 },
+  { id: "hydrocalc", label: "HidroCalc", icon: Waves },
   { id: "notebook", label: "Cuaderno 27 pasos", icon: BookOpen },
   { id: "matrices", label: "Laboratorio K", icon: Grid3X3 },
   { id: "results", label: "Resultados", icon: Calculator },
@@ -365,8 +368,17 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
   return <div className="lab-app">
     <header className="lab-header">
       <div className="lab-brand"><div className="brand-seal"><span>L</span><span>M</span></div><div><strong>LABORATORIO MATRICIAL</strong><small>Universidad Nacional de Cajamarca · Ingeniería Hidráulica</small></div></div>
-      <button className="mobile-menu-button" onClick={() => setMobileMenu(!mobileMenu)}><Menu size={20} /></button>
-      <nav className={mobileMenu ? "open" : ""}>{nav.map((item) => { const Icon = item.icon; return <button key={item.id} className={view === item.id ? "active" : ""} onClick={() => { setView(item.id); setMobileMenu(false); if (item.id === "projects" && user) window.setTimeout(() => void refreshCloud(), 0); }}><Icon size={16} />{item.label}</button>; })}</nav>
+      <button className="mobile-menu-button" aria-label={mobileMenu ? "Cerrar secciones" : "Abrir secciones"} aria-expanded={mobileMenu} aria-controls="lab-sections" onClick={() => setMobileMenu(!mobileMenu)}><Menu size={20} /></button>
+      <nav id="lab-sections" aria-label="Secciones del laboratorio" className={mobileMenu ? "open" : ""} onKeyDown={(event) => {
+        if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const current = nav.findIndex((item) => item.id === view);
+        const next = event.key === "Home" ? 0 : event.key === "End" ? nav.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + nav.length) % nav.length;
+        const target = nav[next];
+        setView(target.id);
+        event.currentTarget.querySelectorAll("button")[next]?.focus();
+        if (target.id === "projects" && user) window.setTimeout(() => void refreshCloud(), 0);
+      }}>{nav.map((item) => { const Icon = item.icon; return <button type="button" key={item.id} className={view === item.id ? "active" : ""} aria-current={view === item.id ? "page" : undefined} onClick={() => { setView(item.id); setMobileMenu(false); if (item.id === "projects" && user) window.setTimeout(() => void refreshCloud(), 0); }}><Icon size={16} />{item.label}</button>; })}</nav>
       <div className="header-actions"><span className="save-indicator"><Cloud size={13} />{saveState}</span><PalettePicker /><button className="icon-button" title="Cambiar tema" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? <Moon size={17} /> : <Sun size={17} />}</button>{user ? <a className="account-button" href={signOutPath}><CircleUserRound size={16} /><span>{user.displayName.split(" ")[0]}</span></a> : <a className="account-button" href={signInPath}><LogIn size={16} /><span>Ingresar / registrarse</span></a>}</div>
     </header>
 
@@ -385,6 +397,7 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
 
       {view === "applications" && <ConcreteMatrixBridge onOpenLab={() => setView("studio")} onApplyConcrete={applyConcreteMaterial} />}
       {view === "soils" && <SoilLabTab />}
+      {view === "hydrocalc" && <HydroCalcTab />}
 
       {view === "notebook" && <section className="notebook-view"><div className="page-title"><div><span className="eyebrow">MEMORIA REGENERADA CON EL MODELO ACTUAL</span><h1>Procedimiento completo en 27 pasos</h1><p>Selecciona un capítulo o despliega las hojas. Los valores no están escritos a mano: proceden del análisis vigente.</p></div><Status ok={result.ok}>{result.ok ? "27 pasos calculados" : "Disponible hasta validación"}</Status></div><div className="chapter-strip">{procedureTitles.map((title, index) => <button key={title} className={procedureStep === index ? "active" : ""} onClick={() => { setProcedureStep(index); document.getElementById(`step-${index}`)?.scrollIntoView({ behavior: "smooth", block: "start" }); }}><span>{index + 1}</span>{title}</button>)}</div><div className="calculation-pages">{procedureTitles.map((title, index) => <details id={`step-${index}`} key={title} open={procedureStep === index || index < 2} onToggle={(event) => { if (event.currentTarget.open) setProcedureStep(index); }}><summary><span className="chapter-number">{String(index + 1).padStart(2, "0")}</span><div><strong>{title}</strong><small>{index < 6 ? "Entrada y modelo" : index < 19 ? "Formulación y solución" : "Resultados y control"}</small></div><ChevronDown size={18} /></summary><div className="calculation-page"><ProcedureContent index={index} project={project} result={result} selectedElement={selectedElement} /></div></details>)}</div></section>}
 
@@ -399,7 +412,7 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
       {view === "projects" && <section className="projects-view"><div className="page-title"><div><span className="eyebrow">GUARDADO, HISTORIAL Y RECUPERACIÓN</span><h1>Mis proyectos estructurales</h1><p>{user ? `Cuenta activa: ${user.email}` : "Ingresa con tu correo de ChatGPT para guardar proyectos y versiones de forma permanente."}</p></div><div className="project-line-actions">{user ? <><button onClick={() => void refreshCloud()}><RefreshCw size={15} />Actualizar</button><button className="primary" onClick={() => void manualSave()}><Archive size={15} />Guardar nueva versión</button></> : <a className="primary link-button" href={signInPath}><LogIn size={15} />Ingresar / crear cuenta</a>}</div></div>{user ? <div className="cloud-layout"><div className="cloud-list">{busy && <div className="loading-line"><LoaderCircle className="spin" />Consultando proyectos…</div>}{cloudProjects.map((item) => <article key={item.id}><div className="cloud-type">{item.structureType === "truss2d" ? "ARMADURA" : "PÓRTICO"}</div><div><h2>{item.name}</h2><p>Versión {item.versionNumber} · actualizado {new Date(item.updatedAt).toLocaleString("es-PE")}</p><span>{item.model.nodes.length} nodos · {item.model.elements.length} elementos</span></div><div><button className="primary" onClick={() => { setProject(item.model); setSelectedElement(item.model.elements[0]?.id ?? null); setView("studio"); }}>Abrir</button><button onClick={() => void openVersions(item.id)}><History size={14} />Historial</button><button className="danger" onClick={() => void deleteCloud(item.id)}><Trash2 size={14} /></button></div></article>)}{!cloudProjects.length && !busy && <div className="empty-explanation"><FolderClock size={30} /><h3>Aún no hay proyectos guardados</h3><p>Guarda una versión del modelo actual para comenzar el historial.</p><button className="primary" onClick={() => void manualSave()}><Save size={15} />Guardar proyecto actual</button></div>}</div><aside className="versions-panel"><span className="panel-kicker">HISTORIAL</span><h2>Versiones disponibles</h2>{versions.map((version) => <button key={version.id} onClick={() => { setProject(version.model); setSelectedElement(version.model.elements[0]?.id ?? null); setView("studio"); }}><strong>v{version.versionNumber}</strong><span>{version.summary}</span><small>{new Date(version.createdAt).toLocaleString("es-PE")}</small></button>)}{!versions.length && <p>Selecciona “Historial” en un proyecto.</p>}</aside></div> : <div className="sign-in-sheet"><div className="brand-seal large"><span>L</span><span>M</span></div><h2>Guarda tus ejercicios y recupéralos desde cualquier sesión</h2><p>El ingreso identifica tu correo y separa tus proyectos. El borrador actual también permanece temporalmente en este dispositivo.</p><a href={signInPath}><LogIn size={17} />Ingresar o crear cuenta</a></div>}</section>}
     </main>
 
-    {view !== "applications" && view !== "soils" && <footer className="export-dock"><div><span>Informe</span><label><input type="checkbox" checked={reportComplete} onChange={(event) => setReportComplete(event.target.checked)} />Matrices completas</label></div><button disabled={!result.ok || busy} onClick={() => void downloadPdf()}><Download size={16} />PDF</button><button disabled={!result.ok || busy} onClick={() => void downloadExcel()}><FileSpreadsheet size={16} />Excel</button><button onClick={() => void downloadCsv()}><Table2 size={16} />CSV</button><button onClick={() => void downloadJson()}><FileJson size={16} />JSON</button><button className="primary" disabled={busy} onClick={() => void manualSave()}>{busy ? <LoaderCircle className="spin" size={16} /> : <Save size={16} />}Guardar</button></footer>}
+    {view !== "applications" && view !== "soils" && view !== "hydrocalc" && <footer className="export-dock"><div><span>Informe</span><label><input type="checkbox" checked={reportComplete} onChange={(event) => setReportComplete(event.target.checked)} />Matrices completas</label></div><button disabled={!result.ok || busy} onClick={() => void downloadPdf()}><Download size={16} />PDF</button><button disabled={!result.ok || busy} onClick={() => void downloadExcel()}><FileSpreadsheet size={16} />Excel</button><button onClick={() => void downloadCsv()}><Table2 size={16} />CSV</button><button onClick={() => void downloadJson()}><FileJson size={16} />JSON</button><button className="primary" disabled={busy} onClick={() => void manualSave()}>{busy ? <LoaderCircle className="spin" size={16} /> : <Save size={16} />}Guardar</button></footer>}
     <input ref={importRef} hidden type="file" accept=".json,.xlsx" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importFile(file); event.target.value = ""; }} />
     {newProjectOpen && <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setNewProjectOpen(false); }}><div className="new-project-modal"><button className="modal-close" onClick={() => setNewProjectOpen(false)}><X size={18} /></button><span className="eyebrow">PLANTILLA ESTRUCTURAL ORDENADA</span><h2>¿Qué desea analizar?</h2><p>Cada opción abre una geometría estable, centrada y numerada. Después puede modificar coordenadas, barras, propiedades, apoyos y cargas.</p><div className="structure-choice"><button onClick={() => { const next = blankProject("truss2d"); setProject(next); setSelectedElement(next.elements[0]?.id ?? null); setSelectedCell([0, 0]); setNewProjectOpen(false); setEditorTab("project"); setView("studio"); changeRef.current += 1; }}><Boxes /><strong>Armadura triangular 2D</strong><span>3 nodos · 3 barras · apoyo fijo + rodillo</span></button><button onClick={() => { const next = blankProject("frame2d"); setProject(next); setSelectedElement(next.elements[0]?.id ?? null); setSelectedCell([0, 0]); setNewProjectOpen(false); setEditorTab("project"); setView("studio"); changeRef.current += 1; }}><Layers3 /><strong>Pórtico rectangular 2D</strong><span>4 nodos · 3 barras · dos empotramientos</span></button></div></div></div>}
   </div>;

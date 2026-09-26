@@ -62,7 +62,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .lab-app { min-height: 100vh; padding-bottom: 82px; }
 .lab-app main { width: min(1720px, 100%); margin: 0 auto; padding: 0 28px 44px; }
 
-.lab-header { height: var(--header-height); position: sticky; top: 0; z-index: 40; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 26px; padding: 0 28px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--sheet), transparent 4%); backdrop-filter: blur(16px); }
+.lab-header { height: var(--header-height); position: sticky; top: 0; z-index: 40; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 26px; padding: 0 28px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--sheet), transparent 4%); backdrop-filter: blur(16px); }
 .lab-brand { display: flex; align-items: center; gap: 12px; min-width: 310px; }
 .lab-brand > div:last-child { display: grid; gap: 3px; }
 .lab-brand strong { font-size: 13px; letter-spacing: .14em; }
@@ -72,9 +72,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .brand-seal span:first-child { border-right: 1px solid color-mix(in srgb, var(--sheet), transparent 35%); }
 .brand-seal.large { width: 76px; height: 76px; }
 .brand-seal.large span { font-size: 22px; }
-.lab-header nav { justify-self: center; display: flex; align-items: center; gap: 3px; }
-.lab-header nav button { display: inline-flex; align-items: center; gap: 7px; padding: 10px 11px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.lab-header nav button:hover, .lab-header nav button.active { color: var(--blue); border-color: var(--blue); }
+.lab-header nav { justify-self: stretch; min-width: 0; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: thin; scroll-behavior: smooth; }
+.lab-header nav button { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; padding: 10px 11px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 700; white-space: nowrap; transition: color .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.lab-header nav button:hover { color: var(--blue); background: var(--blue-soft); transform: translateY(-1px); }
+.lab-header nav button.active { color: var(--blue); border-color: color-mix(in srgb, var(--blue), transparent 64%); background: var(--blue-soft); box-shadow: inset 0 -2px 0 var(--blue); }
+.lab-header nav button:focus-visible { outline-offset: -3px; }
+
+.embedded-lab { padding-top: 28px; }
+.embedded-lab-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; padding: 20px 24px; border: 1px solid var(--line); background: var(--sheet); }
+.embedded-lab-heading h1 { margin: 6px 0; }
+.embedded-lab-heading p { margin: 0; color: var(--muted); }
+.embedded-lab-frame { display: block; width: 100%; height: calc(100dvh - 205px); min-height: 690px; border: 1px solid var(--line); background: #eaf0f5; }
 .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
 .save-indicator { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; white-space: nowrap; }
 .icon-button, .mobile-menu-button { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--sheet); cursor: pointer; }
@@ -395,9 +403,9 @@ textarea { resize: vertical; line-height: 1.5; }
 }
 
 @media (max-width: 1050px) {
-  .lab-header { grid-template-columns: auto auto 1fr; }
+  .lab-header { grid-template-columns: auto auto minmax(0, 1fr); }
   .mobile-menu-button { display: grid; }
-  .lab-header nav { position: fixed; top: var(--header-height); left: 0; right: 0; display: none; grid-template-columns: repeat(3, 1fr); padding: 10px; border-bottom: 1px solid var(--line); background: var(--sheet); }
+  .lab-header nav { position: fixed; top: var(--header-height); left: 0; right: 0; display: none; grid-template-columns: repeat(3, 1fr); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding: 10px; border-bottom: 1px solid var(--line); background: var(--sheet); box-shadow: 0 16px 30px rgb(15 31 44 / 16%); }
   .lab-header nav.open { display: grid; }
   .lab-header nav button svg { display: block; }
   .header-actions { justify-self: end; }

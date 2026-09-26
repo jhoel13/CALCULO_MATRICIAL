@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HidroCalc · Diseño hidráulico</title>
+  <meta name="description" content="Calculadoras de diseño hidráulico: canales, alcantarillas, acueductos, sifones, bocatomas, desarenadores, cámaras de rejas y muros, con desarrollo paso a paso, gráficos, teoría y exportación a PDF/LaTeX.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C8 8 5 11.5 5 15a7 7 0 0014 0c0-3.5-3-7-7-13z' fill='%232563eb'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="btn-menu" aria-label="Abrir menú">☰</button>
+    <a class="brand" href="#/"><span class="logo-drop"></span><span>Hidro<b>Calc</b></span></a>
+    <div class="top-search"><input id="quick" type="search" placeholder="Buscar calculadora…" aria-label="Buscar calculadora"></div>
+    <div class="top-actions">
+      <button class="btn ghost sm" id="btn-project" title="Datos del proyecto para la memoria">Proyecto</button>
+      <button class="icon-btn" id="btn-theme" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">◐</button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar"><nav id="nav"></nav>
+      <div class="side-foot">HidroCalc · EducaTec</div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+    <main id="main" tabindex="-1"></main>
+  </div>
+
+  <dialog id="dlg-project" class="dialog">
+    <form method="dialog">
+      <h2>Datos del proyecto</h2>
+      <p class="muted">Se imprimen en la portada de la memoria de cálculo (PDF y LaTeX).</p>
+      <label>Nombre del proyecto<input id="pj-name" type="text" placeholder="Mejoramiento del sistema de riego…"></label>
+      <label>Responsable<input id="pj-author" type="text" placeholder="Nombre del ingeniero o estudiante"></label>
+      <label>Entidad / curso<input id="pj-org" type="text" placeholder="Universidad · Curso de Obras Hidráulicas"></label>
+      <div class="dlg-actions"><button class="btn ghost" value="cancel">Cancelar</button><button class="btn primary" id="pj-save" value="ok">Guardar</button></div>
+    </form>
+  </dialog>
+
+  <div id="toasts" aria-live="polite"></div>
+  <div id="print-root"></div>
+
+  <script src="vendor/katex/katex.min.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="js/core/util.js"></script>
+  <script src="js/core/steps.js"></script>
+  <script src="js/core/charts.js"></script>
+  <script src="js/core/ui.js"></script>
+  <script src="js/core/report.js"></script>
+  <script src="js/core/app.js"></script>
+  <script src="js/modules/canales.js"></script>
+  <script src="js/modules/tramos.js"></script>
+  <script src="js/modules/alcantarilla.js"></script>
+  <script src="js/modules/acueducto.js"></script>
+  <script src="js/modules/sifon.js"></script>
+  <script src="js/modules/bocatoma.js"></script>
+  <script src="js/modules/desarenador.js"></script>
+  <script src="js/modules/rejas.js"></script>
+  <script src="js/modules/muros.js"></script>
+  <script>HC.init();</script>
+</body>
+</html>
