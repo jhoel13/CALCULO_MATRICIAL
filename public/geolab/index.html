@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" data-mode="light" data-accent="ocean">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11243b">
+  <meta name="description" content="Laboratorio interactivo de mecánica de suelos y cimentaciones: teoría, cálculos desarrollados y gráficos.">
+  <meta name="author" content="JHOEL TOCAS CERCADO">
+  <title>GeoLab · Mecánica de suelos y cimentaciones</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%2311243b'/%3E%3Cpath d='M10 43h44M14 34h36M18 25h28' stroke='%2326bea8' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='17' r='4' fill='%23f3b35e'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <script defer src="vendor/katex/katex.min.js"></script>
+  <script defer src="charts.js"></script>
+  <script defer src="content.js"></script>
+  <script defer src="content-extra.js"></script>
+  <script defer src="guide.js"></script>
+  <script defer src="calculators.js"></script>
+  <script defer src="calculators-extra.js"></script>
+  <script defer src="calculators-extra2.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="upgrade.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">G<span>·</span></span><div><strong>GeoLab</strong><small>INGENIERÍA GEOTÉCNICA</small></div></div>
+      <div class="side-label">CAPÍTULOS</div>
+      <nav id="chapter-nav" class="chapter-nav" aria-label="Capítulos"></nav>
+      <div class="side-footer"><span class="author-overline">DESARROLLADO POR</span><strong>JHOEL TOCAS CERCADO</strong><small>12 capítulos · 37 calculadoras</small></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><button class="menu-btn" id="menu-btn" aria-label="Abrir menú">☰</button><div class="breadcrumb" id="breadcrumb">Capítulo I <span>/</span> Relaciones volumétricas</div><div class="top-actions"><span class="top-pill">SI · kN · m</span><button id="quick-mode" class="top-mode" type="button" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar modo">☾</button><button id="print-btn" class="top-export" title="Abre el diálogo para guardar como PDF">↧ <span>Guardar PDF</span></button></div></header>
+      <main class="workspace">
+        <div class="chapter-heading"><div class="chapter-heading-content"><div class="eyebrow" id="chapter-kicker">CAPÍTULO I</div><h1 id="chapter-title">Relaciones volumétricas y gravimétricas</h1><p id="chapter-lead">Examina las tres fases del suelo y calcula sus relaciones fundamentales.</p><div class="chapter-stats"><span id="chapter-method-count">4 métodos</span><span id="chapter-theory-count">6 conceptos</span><span>Fórmulas y desarrollo</span></div></div><div class="chapter-contours" aria-hidden="true"></div></div>
+        <div class="tabbar" role="tablist" aria-label="Ventanas"><button class="tab active" role="tab" aria-selected="true" data-tab="calculator">Calculadoras</button><button class="tab" role="tab" aria-selected="false" data-tab="theory">Teoría y fórmulas</button><button class="tab" role="tab" aria-selected="false" data-tab="examples">Problemas resueltos</button><button class="tab" role="tab" aria-selected="false" data-tab="guide">Guía técnica</button><button class="tab" role="tab" aria-selected="false" data-tab="sources">Fuentes</button><button class="tab" role="tab" aria-selected="false" data-tab="mode">Claro / oscuro</button><button class="tab" role="tab" aria-selected="false" data-tab="colors">Colores</button></div>
+        <div id="panel-calculator" class="panel active" role="tabpanel"><div class="work-grid"><section class="card calculator-card"><div class="card-head"><div><span class="section-overline">MÉTODO ACTIVO</span><h2 id="calc-title">Relaciones de fases</h2></div><span class="card-icon">∑</span></div><p class="calc-desc" id="calc-desc"></p><label class="select-label" for="calc-select">Método de cálculo</label><select id="calc-select"></select><form id="calc-form" novalidate><div id="fields" class="fields"></div><div class="form-actions"><button type="submit" class="primary-btn">Calcular y desarrollar <span>→</span></button><button type="button" id="reset-btn" class="text-btn">Restablecer</button></div></form><p id="form-error" class="form-error" role="alert" hidden></p><div class="input-footnote">Los datos del ejemplo se pueden editar. Todos los resultados se recalculan con los valores ingresados.</div></section><section class="card result-card"><div class="card-head"><div><span class="section-overline">RESULTADO</span><h2>Desarrollo paso a paso</h2></div><div class="result-actions"><button class="tex-button" id="tex-btn" title="Descargar el desarrollo en código LaTeX">.tex</button><button class="icon-button" id="copy-btn" title="Copiar resultado" aria-label="Copiar resultado">⧉</button></div></div><div id="result-summary" class="result-summary"></div><div id="steps" class="steps"></div><div class="chart-wrap"><div class="chart-heading"><span>VISUALIZACIÓN DEL MODELO</span><span id="chart-caption"></span></div><div id="chart" class="chart"></div><p id="chart-explanation" class="chart-explanation"></p></div><div class="assumption" id="assumption"></div></section></div></div>
+        <div id="panel-theory" class="panel" role="tabpanel" hidden></div>
+        <div id="panel-examples" class="panel" role="tabpanel" hidden></div>
+        <div id="panel-guide" class="panel" role="tabpanel" hidden></div>
+        <div id="panel-sources" class="panel" role="tabpanel" hidden></div>
+        <div id="panel-mode" class="panel" role="tabpanel" hidden></div>
+        <div id="panel-colors" class="panel" role="tabpanel" hidden></div>
+      </main>
+    </div>
+  </div>
+  <div id="print-sheet" aria-hidden="true"></div>
+</body>
+</html>

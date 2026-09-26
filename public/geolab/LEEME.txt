@@ -1,0 +1,21 @@
+GeoLab - Mecánica de suelos y cimentaciones
+Desarrollado por JHOEL TOCAS CERCADO
+
+Abra index.html en un navegador moderno. No hace falta instalar programas ni
+conectarse a Internet. Seleccione un capítulo y una calculadora, introduzca
+los datos y pulse «Calcular y desarrollar».
+
+Incluye 12 capítulos, 37 calculadoras, teoría con fórmulas, problemas
+guiados y una guía técnica de interpretación por capítulo. Las gráficas
+incorporan escalas, unidades y esquemas específicos del método. Use las
+pestañas «Claro / oscuro» y «Colores» para personalizar la apariencia;
+las preferencias se guardan en este navegador.
+
+«Guardar PDF» abre el diálogo de impresión del navegador. Elija «Guardar como
+PDF» para obtener el informe con fórmulas compuestas y gráfico. El botón
+«.tex» descarga el desarrollo en código LaTeX editable.
+
+Los resultados son didácticos y dependen de las hipótesis indicadas para cada
+método. Para diseño de obra, verifique ensayos, unidades y normativa aplicable.
+
+KaTeX se distribuye bajo licencia MIT; consulte vendor/katex/LICENSE.
