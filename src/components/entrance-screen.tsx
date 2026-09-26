@@ -23,9 +23,11 @@ export default function EntranceScreen({ onEnter }: { onEnter: () => void }) {
         />
       </div>
       <div className="entrance-action">
-        <span className="entrance-kicker">UNIVERSIDAD NACIONAL DE CAJAMARCA</span>
-        <h1>Laboratorio digital</h1>
-        <p>Matrices, concreto, mecánica de suelos y diseño hidráulico en un solo espacio.</p>
+        <div className="entrance-action-copy">
+          <span className="entrance-kicker">UNIVERSIDAD NACIONAL DE CAJAMARCA</span>
+          <h1>Laboratorio digital</h1>
+          <p>Matrices, concreto, mecánica de suelos y diseño hidráulico en un solo espacio.</p>
+        </div>
         <button type="button" onClick={enter} disabled={leaving}>
           <span>Entrar al laboratorio</span>
           <ArrowRight size={20} aria-hidden="true" />
