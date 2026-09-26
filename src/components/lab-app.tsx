@@ -50,6 +50,7 @@ import ConcreteMatrixBridge from "./concrete-matrix-bridge";
 import PalettePicker from "./palette-picker";
 import SoilLabTab from "./soil-lab-tab";
 import HydroCalcTab from "./hydrocalc-tab";
+import EntranceScreen from "./entrance-screen";
 
 type View = "studio" | "applications" | "soils" | "hydrocalc" | "notebook" | "matrices" | "results" | "graphics" | "theory" | "projects";
 type EditorTab = "project" | "nodes" | "elements" | "loads" | "materials";
@@ -264,6 +265,7 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
   const [versions, setVersions] = useState<CloudVersion[]>([]);
   const [busy, setBusy] = useState(false);
   const [reportComplete, setReportComplete] = useState(true);
+  const [showEntrance, setShowEntrance] = useState(true);
   const importRef = useRef<HTMLInputElement>(null);
   const changeRef = useRef(0);
   const result = useMemo(() => analyzeProject(project), [project]);
@@ -364,6 +366,8 @@ export default function LabApp({ user, signInPath, signOutPath }: { user: User; 
     setView("studio");
     window.setTimeout(() => document.getElementById("editor")?.scrollIntoView({ behavior: "smooth" }), 50);
   };
+
+  if (showEntrance) return <EntranceScreen onEnter={() => setShowEntrance(false)} />;
 
   return <div className="lab-app">
     <header className="lab-header">
