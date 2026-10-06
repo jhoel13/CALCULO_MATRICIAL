@@ -1,0 +1,77 @@
+:root { --r:12px; --accent:#087f8c; --bg:#edf3f2; --line:#dbe6e2; --f-body:"Segoe UI",system-ui,sans-serif; --f-display:"Segoe UI",system-ui,sans-serif; }
+.topbar {padding:15px 24px;box-shadow:0 3px 20px #163f4510;}
+.brand-mark {border-radius:9px;border-color:var(--accent);width:40px;height:40px;}
+.brand h1 {letter-spacing:-.04em;font-size:1.45rem;}
+.sim-layout {grid-template-columns:290px minmax(0,1fr);}
+.sim-main {padding:22px;gap:18px;}
+.sim-panel {padding:20px 16px;}
+.btn {border-radius:8px;transition:transform .15s,background .15s;}
+.btn:active {transform:translateY(1px);}
+.btn-primary {box-shadow:0 4px 10px #087f8c26;}
+.tool {border-radius:8px;padding:10px 5px;}
+.pfield input,.pfield select {border-radius:7px;padding:7px 8px;}
+.pgrid > p {grid-column:1/-1;margin:0;}
+.sim .topbar-actions {flex-wrap:nowrap;}
+.sim .topbar-actions .btn {white-space:nowrap;flex:none;}
+.view-card,.board-col,.plot-card,.prose section.block,.runbar {box-shadow:0 5px 22px #183d4506;}
+.view-card {padding:16px;}
+.view-head strong {font-size:.98rem;letter-spacing:-.015em;}
+.three-wrap {height:450px;border-radius:10px;background:radial-gradient(ellipse at 50% 40%,#f7faf8,#dfeae5);}
+.views {grid-template-columns: minmax(0,.95fr) minmax(0,1.3fr);gap:18px;}
+.view-options {display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+.view-options label {display:flex;gap:5px;align-items:center;}
+.view-options select {background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:5px;color:var(--ink);font:inherit;}
+.view-options input {accent-color:var(--accent);}
+.lab-intro {display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.lab-intro h2 {font-size:clamp(20px,2.2vw,30px);letter-spacing:-.05em;margin-top:4px;}
+.lab-intro p {margin:5px 0 0;color:var(--muted);font-size:13px;}
+.lab-tag {color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.15em;}
+.model-chip {background:var(--accent-soft);color:var(--accent);padding:6px 12px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap;}
+.metric-strip {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.metric {border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:14px 16px;}
+.metric span {display:block;color:var(--muted);font-size:11px;letter-spacing:.02em;}
+.metric b {display:block;font-size:21px;letter-spacing:-.04em;font-weight:650;margin-top:5px;font-variant-numeric:tabular-nums;}
+.metric small {font-size:11px;color:var(--muted);}
+.balance-note {font-size:12px;color:var(--muted);margin:-7px 0 0;line-height:1.6;}
+.balance-note strong {color:var(--good);}
+.profile-head {display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.profile-head label {font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px;}
+#profile-y {width:150px;}
+#profile {width:100%;display:block;}
+.runbar {align-items:center;padding:14px;}
+.hint {line-height:1.5;}
+.legend .bar {height:8px;border-radius:10px;}
+.st-item {padding:9px 12px;border-radius:8px;}
+.status-list {gap:8px;}
+.events li {padding:7px 9px;}
+.offline-note {padding:8px 12px;background:var(--accent-soft);border-radius:6px;font-size:12px;}
+@media(max-width:1250px){.views{grid-template-columns:1fr}.three-wrap{height:430px}.metric-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.sim-layout{grid-template-columns:1fr}.sim-main{padding:14px}.sim-panel{position:static;max-height:none}.lab-intro{align-items:flex-start}.model-chip{white-space:normal}.metric b{font-size:19px}.sim .topbar-actions{flex-wrap:wrap;}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1c20;--line:#294147;--accent:#57c5d2;}}
+
+.advisor-card {background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:12px;padding:20px;box-shadow:0 5px 22px #183d4506;}
+.advisor-header {display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.advisor-header h2 {font-size:23px;letter-spacing:-.04em;margin-top:4px;}
+.advisor-header p {margin:5px 0 0;color:var(--muted);font-size:13px;}
+.advisor-header .btn {white-space:nowrap;padding:12px 24px;}
+#advisor-status {margin-top:12px;}
+.advisor-progress-head {display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;margin:12px 0 8px;}
+#advisor-bar {height:100%;background:var(--accent);transition:width .15s;}
+#advisor-results {border-top:1px solid var(--line);margin-top:18px;padding-top:18px;}
+.advisor-recommended {background:var(--accent-soft);}
+.advisor-small {display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.advisor-choice-head {display:flex;justify-content:space-between;align-items:center;gap:15px;}
+.advisor-choice-head h3 {margin:8px 0 0;font-size:20px;}
+.advisor-model {font-size:12px;color:var(--muted);}
+#advisor-choice {border:1px solid var(--line);border-radius:10px;background:var(--surface-2);padding:18px;margin-top:20px;}
+.advisor-before-after {display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0;}
+.advisor-before-after section {background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;}
+.advisor-before-after h4 {font-size:14px;margin:0 0 12px;}
+.advisor-stats {display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.advisor-stats span {display:flex;flex-direction:column;font-size:11px;color:var(--muted);gap:2px;}
+.advisor-stats b {font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.advisor-actions {display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.advisor-card .data {width:100%;border-collapse:collapse;font-size:13px;}
+.advisor-card .data th,.advisor-card .data td {padding:10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+.advisor-card .table-wrap {overflow-x:auto;}
+@media(max-width:700px){.advisor-header{align-items:flex-start;flex-direction:column}.advisor-before-after{grid-template-columns:1fr}.advisor-choice-head{align-items:flex-start;flex-direction:column}.advisor-card{padding:14px}.advisor-header .btn{width:100%}}

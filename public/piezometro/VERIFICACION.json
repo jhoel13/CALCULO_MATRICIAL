@@ -1,0 +1,97 @@
+{
+  "checks": [
+    {
+      "check": "linear: closed uniform recharge and exact horizon",
+      "status": "PASS"
+    },
+    {
+      "check": "linear: basin recharge matches exact geometric area",
+      "status": "PASS"
+    },
+    {
+      "check": "linear: pumping schedule split at fractional dates",
+      "status": "PASS"
+    },
+    {
+      "check": "linear: drying reports unmet extraction",
+      "status": "PASS"
+    },
+    {
+      "check": "linear: non-square cells, drains, flood stage and fixed boundaries",
+      "status": "PASS"
+    },
+    {
+      "check": "linear: steady recharge mound agrees with analytical solution",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: closed uniform recharge and exact horizon",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: basin recharge matches exact geometric area",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: pumping schedule split at fractional dates",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: drying reports unmet extraction",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: non-square cells, drains, flood stage and fixed boundaries",
+      "status": "PASS"
+    },
+    {
+      "check": "unconfined: steady recharge mound agrees with analytical solution",
+      "status": "PASS"
+    },
+    {
+      "check": "seasonal rainfall integrates to annual net recharge",
+      "status": "PASS"
+    },
+    {
+      "check": "no-flow internal redistribution conserves water",
+      "status": "PASS"
+    },
+    {
+      "check": "invalid input rejects before allocating mesh",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p1",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p2",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p3",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p4",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p5",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p6",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p7",
+      "status": "PASS"
+    },
+    {
+      "check": "teaching scenario p8",
+      "status": "PASS"
+    }
+  ],
+  "note": "Pruebas numéricas de conservación y soluciones analíticas; no representan calibración con mediciones de campo."
+}

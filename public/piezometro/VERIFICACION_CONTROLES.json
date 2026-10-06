@@ -1,0 +1,49 @@
+{
+  "checks": [
+    {
+      "check": "results show comparison, goals and escaped element names",
+      "status": "PASS"
+    },
+    {
+      "check": "applying starts simulation and undo restores original configuration",
+      "status": "PASS"
+    },
+    {
+      "check": "proposal download contains the selected scenario",
+      "status": "PASS"
+    },
+    {
+      "check": "editing discards obsolete results and disables stale application",
+      "status": "PASS"
+    },
+    {
+      "check": "cancelling a pending analysis leaves the scenario unchanged",
+      "status": "PASS"
+    },
+    {
+      "check": "safe scenario has no applicable or downloadable intervention",
+      "status": "PASS"
+    },
+    {
+      "check": "free-aquifer numerical answers include computed goals",
+      "status": "PASS"
+    },
+    {
+      "check": "worker completes actual engine calculation and sends progress",
+      "status": "PASS"
+    },
+    {
+      "check": "page includes all advisor controls and loads scripts before the app",
+      "status": "PASS"
+    },
+    {
+      "check": "answer solver updates horizon, answers and transient view together",
+      "status": "PASS"
+    },
+    {
+      "check": "answer solver rejects obsolete results after parameters change",
+      "status": "PASS"
+    }
+  ],
+  "note": "Pruebas de integración de controles con DOM de prueba y motor real del worker. No sustituyen una revisión visual en navegador."
+}

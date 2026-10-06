@@ -1,0 +1,470 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="stylesheet" href="css/realista.css?v=4.0"></head><body>
+<title>Piezómetro 2D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: barra superior + panel de datos a la izquierda (estilo libreta de campo) + área de trabajo con pestañas. */
+:root {
+  --bg: #eef2f1;          /* mineral claro */
+  --surface: #ffffff;
+  --surface-2: #f6f8f8;
+  --ink: #13242c;
+  --muted: #56686d;
+  --line: #d3dcdc;
+  --accent: #0e6b87;      /* agua del acuífero */
+  --accent-ink: #ffffff;
+  --accent-soft: #dcebef;
+  --clay: #a85f22;        /* recarga, fuentes, avisos */
+  --clay-soft: #f5e7da;
+  --good: #2c7a4b;
+  --good-soft: #dff0e5;
+  --bad: #b23a3a;
+  --bad-soft: #f6e0e0;
+  --code-bg: #f3f6f6;
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r: 6px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1518; --surface: #132126; --surface-2: #182a30; --ink: #e2ebeb; --muted: #94a7ab;
+    --line: #26393f; --accent: #4fb4d0; --accent-ink: #062027; --accent-soft: #163a45;
+    --clay: #e19a58; --clay-soft: #3a2a1b; --good: #6cc792; --good-soft: #173423;
+    --bad: #ec7f7f; --bad-soft: #3d1c1c; --code-bg: #0f1b1f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1518; --surface: #132126; --surface-2: #182a30; --ink: #e2ebeb; --muted: #94a7ab;
+  --line: #26393f; --accent: #4fb4d0; --accent-ink: #062027; --accent-soft: #163a45;
+  --clay: #e19a58; --clay-soft: #3a2a1b; --good: #6cc792; --good-soft: #173423;
+  --bad: #ec7f7f; --bad-soft: #3d1c1c; --code-bg: #0f1b1f; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 15px/1.5 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--f-display); font-stretch: 85%; line-height: 1.15; text-wrap: balance; margin: 0; }
+.mono, code, pre, .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Barra superior ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; justify-content: space-between;
+  padding: var(--s3) var(--s4);
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; gap: var(--s3); align-items: center; min-width: 0; }
+.brand h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em; }
+.brand-sub { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.brand-mark {
+  width: 34px; height: 34px; flex: none; border-radius: 4px;
+  background:
+    linear-gradient(to top, var(--accent) 0 46%, transparent 46%),
+    repeating-linear-gradient(to top, transparent 0 5px, var(--line) 5px 6px);
+  border: 2px solid var(--ink);
+}
+.topbar-actions { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; }
+
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  padding: 7px 14px; border-radius: var(--r); cursor: pointer; font-weight: 600;
+}
+.btn:hover { border-color: var(--accent); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-small { padding: 5px 10px; font-size: 0.88rem; }
+.btn-ghost { background: transparent; }
+.btn[disabled] { opacity: 0.55; cursor: progress; }
+.select-strong { padding: 7px 10px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface); font-weight: 600; max-width: 100%; }
+
+/* ---------- Disposición ---------- */
+.layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); min-height: calc(100vh - 70px); }
+.panel {
+  background: var(--surface); border-right: 1px solid var(--line);
+  padding: var(--s4); overflow-y: auto; max-height: calc(100vh - 66px);
+  position: sticky; top: 66px;
+}
+.main { padding: var(--s5) var(--s5) var(--s6); min-width: 0; display: flex; flex-direction: column; gap: var(--s4); }
+.only-narrow { display: none; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .panel { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--line); }
+  .panel.collapsed { display: none; }
+  .only-narrow { display: inline-block; }
+  .main { padding: var(--s4); }
+}
+
+/* ---------- Panel de parámetros ---------- */
+.pgroup { border: 0; margin: 0 0 var(--s4); padding: 0; }
+.pgroup legend {
+  font-family: var(--f-display); font-weight: 700; font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); padding: 0 0 var(--s2);
+  border-bottom: 1px solid var(--line); width: 100%; margin-bottom: var(--s2);
+}
+.pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2) var(--s3); }
+.pfield { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pfield.full { grid-column: 1 / -1; }
+.pfield > span { font-size: 0.8rem; color: var(--muted); }
+.pfield input, .pfield select {
+  width: 100%; padding: 5px 7px; border: 1px solid var(--line); border-radius: 4px;
+  background: var(--surface-2); font-family: var(--f-mono); font-size: 0.86rem;
+}
+.pfield input:focus, .pfield select:focus { border-color: var(--accent); outline: none; }
+.pcheck { display: flex; gap: var(--s2); align-items: center; font-size: 0.88rem; grid-column: 1 / -1; }
+.pside { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--s2); padding: var(--s2); background: var(--surface-2); border-radius: 4px; }
+.pside .pside-title { grid-column: 1 / -1; font-size: 0.8rem; font-weight: 600; }
+.pside .pfield:first-of-type { grid-column: 1 / -1; }
+.derived { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); grid-column: 1 / -1; line-height: 1.6; }
+.derived b { color: var(--ink); font-weight: 600; }
+.warn { color: var(--bad); font-weight: 600; }
+
+/* ---------- Cabecera de escenario ---------- */
+.scenario-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s4); align-items: flex-end; }
+.scenario-head > div:first-child { min-width: 0; max-width: 70ch; }
+.eyebrow { margin: 0 0 var(--s1); font: 700 0.75rem var(--f-display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--clay); }
+.scenario-head h2 { font-size: 1.7rem; font-weight: 800; }
+.lede { color: var(--muted); margin: var(--s2) 0 0; }
+.status { font-family: var(--f-mono); font-size: 0.82rem; color: var(--muted); }
+.status.busy { color: var(--clay); }
+
+/* ---------- KPI ---------- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--s3); }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s3) var(--s4); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.kpi .k-label { font-size: 0.8rem; color: var(--muted); }
+.kpi .k-value { font: 700 1.45rem var(--f-display); font-variant-numeric: tabular-nums; }
+.kpi .k-sub { font-size: 0.8rem; color: var(--muted); }
+.pill { align-self: flex-start; font-size: 0.72rem; font-weight: 700; padding: 1px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; }
+.pill.ok { background: var(--good-soft); color: var(--good); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.info { background: var(--accent-soft); color: var(--accent); }
+.pill.warn { background: var(--clay-soft); color: var(--clay); }
+
+/* ---------- Pestañas ---------- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tab {
+  border: 0; background: transparent; padding: 9px 14px; cursor: pointer; white-space: nowrap;
+  color: var(--muted); font-weight: 600; border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--ink); }
+.tabpanel { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: flex-end; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s3); }
+.field-inline { display: flex; flex-direction: column; gap: 2px; font-size: 0.82rem; color: var(--muted); }
+.field-inline.grow { flex: 1 1 220px; }
+.field-inline select, .field-inline input[type="number"] { padding: 5px 7px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); color: var(--ink); }
+.field-inline input[type="number"] { width: 90px; }
+input[type="range"] { accent-color: var(--accent); width: 100%; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); }
+@media (max-width: 1100px) { .grid-2 { grid-template-columns: minmax(0, 1fr); } }
+.plot-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s2); min-width: 0; }
+.plot { width: 100%; height: 340px; }
+.plot-tall { height: 470px; }
+.plot-small { height: 260px; }
+.note { color: var(--muted); font-size: 0.88rem; margin: 0; max-width: 90ch; }
+
+/* ---------- Prosa (fórmulas, desarrollo) ---------- */
+.prose { max-width: 980px; display: flex; flex-direction: column; gap: var(--s4); }
+.prose section.block { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4) var(--s5); min-width: 0; }
+.prose h3 { font-size: 1.2rem; font-weight: 750; margin-bottom: var(--s2); }
+.prose h4 { font-size: 1rem; font-weight: 700; margin: var(--s3) 0 var(--s1); }
+.prose p { margin: var(--s2) 0; max-width: 78ch; }
+.prose ul, .prose ol { margin: var(--s2) 0; padding-left: 1.3em; max-width: 78ch; }
+.prose li { margin: 3px 0; }
+.math { overflow-x: auto; overflow-y: hidden; padding: var(--s1) 0; }
+.math mjx-container { margin: 0.4em 0 !important; }
+.callout { border-radius: 4px; padding: var(--s3) var(--s4); background: var(--surface-2); border-left: 3px solid var(--accent); }
+.callout.clay { border-left-color: var(--clay); background: var(--clay-soft); }
+.callout.bad { border-left-color: var(--bad); background: var(--bad-soft); }
+.callout.good { border-left-color: var(--good); background: var(--good-soft); }
+.callout > :first-child { margin-top: 0; }
+.callout > :last-child { margin-bottom: 0; }
+.step-tag { font: 700 0.72rem var(--f-display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+details.qa { border-top: 1px solid var(--line); padding: var(--s2) 0; }
+details.qa summary { cursor: pointer; font-weight: 600; }
+details.qa[open] summary { margin-bottom: var(--s2); }
+
+.table-wrap { overflow-x: auto; }
+table.data { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+table.data th, table.data td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+table.data th { font-family: var(--f-display); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+table.data td.n { font-family: var(--f-mono); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---------- Laboratorio ---------- */
+.lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3); }
+@media (max-width: 1100px) { .lab-grid { grid-template-columns: minmax(0, 1fr); } }
+.lab { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4); display: flex; flex-direction: column; gap: var(--s2); min-width: 0; }
+.lab-wide { grid-column: 1 / -1; }
+.lab h3 { font-size: 1.08rem; font-weight: 750; }
+.hint { margin: 0; color: var(--muted); font-size: 0.88rem; }
+.stencil { display: grid; grid-template-columns: repeat(3, minmax(0, 110px)); grid-template-areas: ". n ." "w c e" ". s ."; gap: var(--s2); justify-content: center; }
+.stencil label { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--muted); gap: 2px; }
+.stencil label:nth-child(1) { grid-area: n; } .stencil label:nth-child(2) { grid-area: w; }
+.stencil label:nth-child(3) { grid-area: c; } .stencil label:nth-child(4) { grid-area: e; }
+.stencil label:nth-child(5) { grid-area: s; }
+.stencil input, .row-fields input { padding: 5px 7px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface-2); font-family: var(--f-mono); width: 100%; }
+.stencil label:nth-child(3) input { border-color: var(--accent); }
+.row-fields { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: flex-end; }
+.row-fields label { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--muted); gap: 2px; width: 130px; }
+.calc-out { font-family: var(--f-mono); font-size: 0.86rem; background: var(--code-bg); border-radius: 4px; padding: var(--s3); overflow-x: auto; white-space: pre-wrap; }
+.calc-out:empty { display: none; }
+
+/* ---------- Exportar ---------- */
+.export-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: var(--s3); }
+.export-btn {
+  display: flex; flex-direction: column; gap: 2px; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s3) var(--s4);
+}
+.export-btn:hover, .export-btn.active { border-color: var(--accent); }
+.export-btn strong { font-family: var(--f-display); font-size: 1rem; }
+.export-btn span { font-size: 0.82rem; color: var(--muted); }
+.code-head { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+.code-actions { display: flex; gap: var(--s2); }
+.code { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4); max-height: 520px; overflow: auto; font-size: 0.8rem; line-height: 1.5; white-space: pre; }
+#pdf-frame { width: 100%; height: 640px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+
+/* ---------- Informe (fuera de pantalla, sólo para el PDF) ---------- */
+#report-root { position: absolute; left: -10000px; top: 0; width: 760px; }
+.rep { width: 760px; background: #ffffff; color: #13242c; font: 13px/1.5 var(--f-body); padding: 0 8px; }
+.rep h1 { font: 800 24px var(--f-display); margin: 0 0 4px; color: #13242c; }
+.rep h2 { font: 750 17px var(--f-display); margin: 10px 0 4px; color: #0e6b87; border-bottom: 1px solid #d3dcdc; padding-bottom: 3px; }
+.rep h3 { font: 700 14px var(--f-display); margin: 8px 0 2px; color: #13242c; }
+.rep p, .rep li { margin: 3px 0; color: #13242c; }
+.rep .muted { color: #56686d; }
+.rep table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.rep th, .rep td { border-bottom: 1px solid #d3dcdc; padding: 3px 6px; text-align: left; color: #13242c; }
+.rep td.n { font-family: var(--f-mono); text-align: right; }
+.rep img { width: 100%; display: block; }
+.rep .callout { background: #f3f6f6; border-left: 3px solid #0e6b87; padding: 6px 10px; }
+.rep .callout.clay { background: #f5e7da; border-left-color: #a85f22; }
+.rep .callout.bad { background: #f6e0e0; border-left-color: #b23a3a; }
+.rep .callout.good { background: #dff0e5; border-left-color: #2c7a4b; }
+.rep mjx-container { color: #13242c; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.rep .events { max-height: none; overflow: visible; list-style: none; padding: 0; margin: 0; }
+.rep .events li { display: grid; grid-template-columns: 80px 1fr; gap: 6px; padding: 2px 6px; border-bottom: 1px solid #d3dcdc; }
+.rep .answer { border-left: 3px solid #0e6b87; padding: 4px 10px; background: #f3f6f6; }
+
+</style>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'local' },
+    startup: { typeset: false },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg-full.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div>
+      <h1>Piezómetro 2D</h1>
+      <p class="brand-sub">Modelamiento numérico de flujo subterráneo · S ∂h/∂t = T∇²h + Q<sub>s</sub></p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <label class="sr-only" for="preset">Escenario</label>
+    <select id="preset" class="select-strong">
+      <option value="esc1">Escenario 1 · Canal Cumbemayo</option>
+      <option value="esc2">Escenario 2 · Presa de tierra</option>
+      <option value="esc0">Extra · Pozo de bombeo</option>
+    </select>
+    <button id="btn-run" class="btn btn-primary" type="button">Calcular</button>
+    <a class="btn" href="simulador.html" style="text-decoration:none">Simulador interactivo</a>
+    <button id="btn-pdf" class="btn" type="button">Informe PDF</button>
+    <button id="btn-matlab" class="btn" type="button">MATLAB</button>
+    <button id="btn-panel" class="btn btn-ghost only-narrow" type="button" aria-expanded="false" aria-controls="panel">Datos</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="panel" class="panel" aria-label="Datos del modelo">
+    <div id="params"></div>
+  </aside>
+
+  <main class="main">
+    <section class="scenario-head">
+      <div>
+        <p class="eyebrow" id="sc-team"></p>
+        <h2 id="sc-name"></h2>
+        <p id="sc-desc" class="lede"></p>
+      </div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="kpis" class="kpis" aria-label="Respuesta de ingeniería"></section>
+
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button role="tab" class="tab" data-tab="t3d" aria-selected="true">Modelo 3D</button>
+      <button role="tab" class="tab" data-tab="tform" aria-selected="false">Fórmulas</button>
+      <button role="tab" class="tab" data-tab="tres" aria-selected="false">Resultados</button>
+      <button role="tab" class="tab" data-tab="tdev" aria-selected="false">Desarrollo del problema</button>
+      <button role="tab" class="tab" data-tab="tlab" aria-selected="false">Laboratorio</button>
+      <button role="tab" class="tab" data-tab="texp" aria-selected="false">Exportar</button>
+    </nav>
+
+    <!-- 3D -->
+    <section class="tabpanel" id="t3d" role="tabpanel">
+      <div class="toolbar">
+        <div class="field-inline">
+          <label for="view-field">Campo</label>
+          <select id="view-field">
+            <option value="ftcs">h(x,y,t) transitorio (FTCS)</option>
+            <option value="rise">Cambio h − h₀ (FTCS)</option>
+            <option value="steady">h estacionario (SOR)</option>
+            <option value="diff">Diferencia FTCS(t) − estacionario</option>
+          </select>
+        </div>
+        <div class="field-inline grow">
+          <label for="time-slider">Tiempo <output id="time-label" class="mono"></output></label>
+          <input id="time-slider" type="range" min="0" max="1" step="1" value="1">
+        </div>
+        <button id="btn-play" class="btn btn-small" type="button">▶ Animar</button>
+        <div class="field-inline">
+          <label for="zexag">Exag. vertical</label>
+          <input id="zexag" type="number" min="0.05" max="50" step="0.05" value="1">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="plot-card"><div id="plot3d" class="plot plot-tall"></div></div>
+        <div class="plot-card"><div id="plotmap" class="plot plot-tall"></div></div>
+      </div>
+      <p class="note" id="note3d"></p>
+    </section>
+
+    <!-- Fórmulas -->
+    <section class="tabpanel" id="tform" role="tabpanel" hidden>
+      <div id="formulas" class="prose"></div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="tabpanel" id="tres" role="tabpanel" hidden>
+      <div class="grid-2">
+        <div class="plot-card"><div id="plotseries" class="plot"></div></div>
+        <div class="plot-card"><div id="plotprofile" class="plot"></div></div>
+        <div class="plot-card"><div id="plotconv" class="plot"></div></div>
+        <div class="plot-card" id="extra-card"><div id="plotextra" class="plot"></div></div>
+      </div>
+      <div id="tables" class="prose"></div>
+    </section>
+
+    <!-- Desarrollo -->
+    <section class="tabpanel" id="tdev" role="tabpanel" hidden>
+      <div id="development" class="prose"></div>
+    </section>
+
+    <!-- Laboratorio -->
+    <section class="tabpanel" id="tlab" role="tabpanel" hidden>
+      <div class="lab-grid">
+        <article class="lab">
+          <h3>Calculadora de un nodo FTCS</h3>
+          <p class="hint">Actualiza un nodo “a mano”, como pide la Sesión 3. Valores iniciales: pregunta de control del Escenario 1.</p>
+          <div class="stencil">
+            <label>h<sub>i,j+1</sub><input id="n-N" type="number" step="any" value="15.03"></label>
+            <label>h<sub>i−1,j</sub><input id="n-W" type="number" step="any" value="15.02"></label>
+            <label>h<sub>i,j</sub><input id="n-C" type="number" step="any" value="15.00"></label>
+            <label>h<sub>i+1,j</sub><input id="n-E" type="number" step="any" value="15.04"></label>
+            <label>h<sub>i,j−1</sub><input id="n-S" type="number" step="any" value="15.01"></label>
+          </div>
+          <div class="row-fields">
+            <label>Δt [días]<input id="n-dt" type="number" step="any" value="0.9"></label>
+            <label>Q<sub>s</sub> [m/día]<input id="n-Qs" type="number" step="any" value="0"></label>
+            <button id="n-use" class="btn btn-small" type="button">Usar T, S, Δx, Δy del modelo</button>
+          </div>
+          <div id="n-out" class="calc-out"></div>
+        </article>
+
+        <article class="lab">
+          <h3>Barrido de ω (SOR)</h3>
+          <p class="hint">Cuenta las iteraciones hasta la tolerancia para cada ω y las compara con ω óptimo y con la fórmula de HT6.</p>
+          <button id="btn-sweep" class="btn btn-small" type="button">Ejecutar barrido</button>
+          <div id="plotsweep" class="plot plot-small"></div>
+        </article>
+
+        <article class="lab">
+          <h3>Prueba de estabilidad</h3>
+          <p class="hint">Corre FTCS con Δt = k·Δt<sub>máx</sub> y una perturbación de 10⁻¹² m que imita el redondeo. Con k &gt; 1 la solución explota.</p>
+          <div class="row-fields">
+            <label>k = Δt/Δt<sub>máx</sub><input id="st-k" type="number" step="0.05" value="1.1"></label>
+            <button id="btn-stab" class="btn btn-small" type="button">Probar</button>
+          </div>
+          <div id="st-out" class="calc-out"></div>
+          <div id="plotstab" class="plot plot-small"></div>
+        </article>
+
+        <article class="lab">
+          <h3>Jacobi vs Gauss-Seidel vs SOR</h3>
+          <p class="hint">Mismo problema estacionario, tres formas de iterar. Escala logarítmica del cambio máximo por iteración.</p>
+          <button id="btn-methods" class="btn btn-small" type="button">Comparar métodos</button>
+          <div id="plotmethods" class="plot plot-small"></div>
+        </article>
+
+        <article class="lab lab-wide" id="lab-scenario">
+          <h3 id="lab-sc-title">Análisis de escenario</h3>
+          <p class="hint" id="lab-sc-hint"></p>
+          <button id="btn-scenario-lab" class="btn btn-small" type="button">Ejecutar</button>
+          <div id="lab-sc-out" class="calc-out"></div>
+          <div id="plotsclab" class="plot"></div>
+        </article>
+
+        <article class="lab lab-wide">
+          <h3>Convergencia de malla</h3>
+          <p class="hint">Resuelve el estacionario con Δ, Δ/2 y Δ/4 y mide el cambio en el primer monitor. El error espacial es O(Δx²).</p>
+          <button id="btn-mesh" class="btn btn-small" type="button">Refinar malla</button>
+          <div id="mesh-out" class="calc-out"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Exportar -->
+    <section class="tabpanel" id="texp" role="tabpanel" hidden>
+      <div class="export-grid">
+        <button class="export-btn" data-exp="pdf" type="button"><strong>Informe PDF</strong><span>Fórmulas, desarrollo, gráficas 3D y tablas</span></button>
+        <button class="export-btn" data-exp="matlab" type="button"><strong>Script MATLAB (.m)</strong><span>Recalcula FTCS + SOR y dibuja surf/contour</span></button>
+        <button class="export-btn" data-exp="matdata" type="button"><strong>Datos MATLAB (.m)</strong><span>Matrices h, x, y y series ya calculadas</span></button>
+        <button class="export-btn" data-exp="python" type="button"><strong>Script Python (.py)</strong><span>NumPy + Matplotlib, para Colab</span></button>
+        <button class="export-btn" data-exp="csv" type="button"><strong>Tabla CSV</strong><span>Campo final y estacionario nodo a nodo</span></button>
+        <button class="export-btn" data-exp="json" type="button"><strong>Guardar datos (.json)</strong><span>Parámetros para recargarlos después</span></button>
+        <label class="export-btn" for="json-load"><strong>Cargar datos (.json)</strong><span>Restaura un caso guardado</span><input id="json-load" type="file" accept=".json,application/json" class="sr-only"></label>
+      </div>
+      <div class="code-head">
+        <span id="code-title" class="mono">Vista previa</span>
+        <div class="code-actions">
+          <button id="btn-copy" class="btn btn-small" type="button">Copiar</button>
+          <button id="btn-download" class="btn btn-small" type="button">Descargar</button>
+        </div>
+      </div>
+      <pre id="code-preview" class="code" tabindex="0">Elija un formato para ver el archivo generado.</pre>
+      <div id="pdf-frame-wrap" hidden><iframe id="pdf-frame" title="Vista previa del informe PDF"></iframe></div>
+    </section>
+  </main>
+</div>
+
+<div id="report-root" aria-hidden="true"></div>
+
+<script src="js/presets.js"></script>
+<script src="js/solver.js"></script>
+<script src="js/texfmt.js"></script>
+<script src="js/content.js"></script>
+<script src="js/exporters.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+
+</body></html>

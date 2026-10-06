@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "description": "Scripts independientes del simulador y sus pruebas, aislados del proyecto ESM anfitrión."
+}

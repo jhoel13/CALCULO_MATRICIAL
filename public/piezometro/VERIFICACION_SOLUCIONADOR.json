@@ -1,0 +1,69 @@
+{
+  "checks": [
+    {
+      "check": "comparison preserves input, grid, model, horizon and protected elements",
+      "status": "PASS"
+    },
+    {
+      "check": "safe baseline does not propose unnecessary interventions",
+      "status": "PASS"
+    },
+    {
+      "check": "no target does not invent a success objective",
+      "status": "PASS"
+    },
+    {
+      "check": "initial unsafe condition cannot be erased by a later drain",
+      "status": "PASS"
+    },
+    {
+      "check": "cancellation is respected between cooperative calculation blocks",
+      "status": "PASS"
+    },
+    {
+      "check": "fosa goal is checked at horizon and well goal at worst time",
+      "status": "PASS"
+    },
+    {
+      "check": "pumping alternatives disclose the actual changed rates",
+      "status": "PASS"
+    },
+    {
+      "check": "safe candidate ranks above unsafe lower-effort candidate",
+      "status": "PASS"
+    },
+    {
+      "check": "full original p1 yields a verified mitigation in free-aquifer mode",
+      "status": "PASS"
+    },
+    {
+      "check": "full original p2 yields a verified mitigation in free-aquifer mode",
+      "status": "PASS"
+    },
+    {
+      "check": "full original p7 yields a verified mitigation in free-aquifer mode",
+      "status": "PASS"
+    }
+  ],
+  "note": "Comparación didáctica de alternativas finitas; no se demuestra un óptimo global ni viabilidad constructiva.",
+  "scenarios": [
+    {
+      "scenario": "p1",
+      "best": "Revestir canales al 80 %",
+      "before": 5,
+      "after": 0
+    },
+    {
+      "scenario": "p2",
+      "best": "Regular bombeo al 50 %",
+      "before": 3,
+      "after": 0
+    },
+    {
+      "scenario": "p7",
+      "best": "Dren de intercepción",
+      "before": 2,
+      "after": 0
+    }
+  ]
+}

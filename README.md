@@ -82,3 +82,13 @@ R = K U − F
 ```
 
 La solución usa Cholesky LLᵀ cuando corresponde y eliminación gaussiana con pivoteo como respaldo. No calcula `inv(KLL)`.
+
+## Ampliación: Piezómetro 3D V4
+
+El nuevo botón **Piezómetro 3D** abre el simulador completo dentro del laboratorio. **Abrir en ventana completa** proporciona más espacio y **Descargar código del proyecto** permite obtener el repositorio completo. Todos los módulos anteriores permanecen disponibles.
+
+Incluye los ocho casos originales, acuífero lineal y libre, visualización 3D, curvas de carga, flechas de Darcy, perfil, series temporales, balance de agua, respuestas numéricas y exportaciones. **Solucionar** compara medidas, muestra criterios antes/después y permite aplicar o deshacer la propuesta. Los archivos y dependencias locales se encuentran en `public/piezometro/`; su documentación de alcance y verificación está en `LEEME.md`.
+
+Las propuestas son didácticas, evaluadas durante el horizonte completo; no constituyen una optimización global ni un diseño calibrado. Los drenes son ideales. El simulador no altera los cálculos ni el proyecto activo de estructuras.
+
+La integración web de Piezómetro usa Three.js 0.147.0, MathJax 3.2.2, jsPDF 2.5.1 y html2canvas 1.4.1 desde jsDelivr, con versiones fijadas. Requiere conexión para cargar estas bibliotecas; el motor numérico, comparador, mapas y perfiles se sirven desde el propio proyecto. La entrega original V4 independiente conserva sus bibliotecas locales.

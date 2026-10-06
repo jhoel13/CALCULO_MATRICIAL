@@ -641,3 +641,10 @@ textarea { resize: vertical; line-height: 1.5; }
   .entrance-art img, .entrance-art::after, .entrance-action, .entrance-screen.is-leaving { animation: none; }
   .entrance-action button, .entrance-action button svg { transition: none; }
 }
+
+/* Piezómetro: comparte el marco de los laboratorios existentes. */
+.piezometer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.piezometer-actions a { display: inline-flex; align-items: center; min-height: 42px; padding: 10px 14px; border: 1px solid var(--line); color: var(--ink); background: var(--sheet); text-decoration: none; font-size: 14px; font-weight: 600; }
+.piezometer-actions a:hover { border-color: var(--blue); }
+.piezometer-actions a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+@media (max-width: 600px) { .piezometer-actions { width: 100%; } .piezometer-actions a { flex: 1 1 200px; justify-content: center; text-align: center; } }
